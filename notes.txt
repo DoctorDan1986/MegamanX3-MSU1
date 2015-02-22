@@ -1,0 +1,179 @@
+Mega Man X3
+LoROM
+
+==============
+= Free Space =
+==============
+0x7D20 ($00:FD20) to 0x7EEF ($00:FEEF) = 463 bytes
+
+============
+= Research =
+============
+; Beginning of the game
+$00/848E 8D 43 21    STA $2143  [$06:2143]   A:A00D X:0014 Y:012F P:envMxdIzC
+
+$00/8422 8D 40 21    STA $2140  [$06:2140]   A:80FA X:FFFF Y:05D4 P:envMxdIZC
+$00/8422 8D 40 21    STA $2140  [$06:2140]   A:80F9 X:FFFF Y:7FC8 P:envMxdIZC
+
+; At capcom logo, WHY IN RAM !
+$7E/2442 8D 40 21    STA $2140  [$06:2140]   A:00F7 X:0002 Y:0000 P:eNvMXdIzc
+$7E/2445 E8          INX                     A:00F7 X:0002 Y:0000 P:eNvMXdIzc
+$7E/2446 E8          INX                     A:00F7 X:0003 Y:0000 P:envMXdIzc
+$7E/2447 8A          TXA                     A:00F7 X:0004 Y:0000 P:envMXdIzc
+$7E/2448 29 1E       AND #$1E                A:0004 X:0004 Y:0000 P:envMXdIzc
+$7E/244A 8D D4 09    STA $09D4  [$06:09D4]   A:0004 X:0004 Y:0000 P:envMXdIzc
+$7E/244D 60          RTS                     A:0004 X:0004 Y:0000 P:envMXdIzc
+
+; When playing a sound effect (and entering the options menu)
+$7E/2424 8C 41 21    STY $2141  [$06:2141]   A:A22A X:0010 Y:0000 P:envMXdIZC
+$7E/2442 8D 40 21    STA $2140  [$06:2140]   A:A205 X:0010 Y:0000 P:envMXdIzc
+
+$7E/2424 8C 41 21    STY $2141  [$06:2141]   A:002B X:0012 Y:0002 P:envMXdIzC
+$7E/243C 9C 42 21    STZ $2142  [$06:2142]   A:00F6 X:0012 Y:0002 P:eNvMXdIzc
+$7E/243F 8C 43 21    STY $2143  [$06:2143]   A:00F6 X:0012 Y:0002 P:eNvMXdIzc
+$7E/2442 8D 40 21    STA $2140  [$06:2140]   A:00F6 X:0012 Y:0002 P:eNvMXdIzc
+
+
+; Intro Stage
+$00/84E4 20 FD 84    JSR $84FD  [$00:84FD]   A:1812 X:0080 Y:0026 P:envMXdIzc
+
+; Boss Intro
+$00/84E4 20 FD 84    JSR $84FD  [$00:84FD]   A:0127 X:0000 Y:00B3 P:envMXdIzC
+
+; Boss Battle
+$00/84E4 20 FD 84    JSR $84FD  [$00:84FD]   A:001A X:0004 Y:0064 P:envMXdIzC
+
+; Password
+$00/84E4 20 FD 84    JSR $84FD  [$00:84FD]   A:981E X:00FF Y:007D P:envMXdIzc
+
+; Stage Select
+$00/84E4 20 FD 84    JSR $84FD  [$00:84FD]   A:0C1D X:00FE Y:0077 P:envMXdIzc
+
+
+=========
+= Music =
+=========
+The game stores music with an $11 offset
+
+$11 = Capcom Logo
+$12 = Intro Stage
+$13 = Blast Hornet
+$14 = Frost Buffalo
+$15 = Gravity Beetle
+$16 = Toxic Seahorse
+$17 = Doppler Stage 1
+$18 = Crush Crawfish
+$19 = Neon Tiger
+$1A = Boss Battle 1
+$1B = Doppler Stage 4
+$1C = Title Screen
+$1D = Stage Select
+$1E = Passsword
+$1F = Tunnel Rhino
+$20 = Boss Selected Jingle
+$21 = Talking to Dr.Cain
+$22 = Doppler Boss Battle
+$23 = Doppler Stage Select
+$24 = Victory Jingle
+$25 = Intro cutscene
+$26 = Ending Theme 1
+$27 = Boss Intro 1
+$28 = Silence
+$29 = Doppler Stage 3
+$2A = Volt Catfish (Dummy ?)
+$2B = Volt Catfish
+$2C = Vile Secret Stage
+$2D = Sigma Battle 1
+$2E = Sigma Battle 2
+$2F = Cast Roll (Ending Theme 2)
+$30 = Got a Weapon Jingle
+$31 = Zero Theme
+$32 = 
+$33 = 
+$34 = 
+
+============
+= Routines =
+============
+$00/83D5 84 02       STY $02    [$00:0002]   A:0111 X:0004 Y:00FA P:eNvMXdIzC
+$00/83D7 C2 30       REP #$30                A:0111 X:0004 Y:00FA P:eNvMXdIzC
+$00/83D9 29 FF 00    AND #$00FF              A:0111 X:0004 Y:00FA P:eNvmxdIzC
+$00/83DC 85 00       STA $00    [$00:0000]   A:0011 X:0004 Y:00FA P:envmxdIzC
+$00/83DE 0A          ASL A                   A:0011 X:0004 Y:00FA P:envmxdIzC
+$00/83DF 65 00       ADC $00    [$00:0000]   A:0022 X:0004 Y:00FA P:envmxdIzc
+$00/83E1 AA          TAX                     A:0033 X:0004 Y:00FA P:envmxdIzc
+$00/83E2 BF 00 80 09 LDA $098000,x[$09:8033] A:0033 X:0033 Y:00FA P:envmxdIzc
+$00/83E6 29 FF 7F    AND #$7FFF              A:05D4 X:0033 Y:00FA P:envmxdIzc
+$00/83E9 A8          TAY                     A:05D4 X:0033 Y:00FA P:envmxdIzc
+$00/83EA A9 00 80    LDA #$8000              A:05D4 X:0033 Y:05D4 P:envmxdIzc
+$00/83ED 85 10       STA $10    [$00:0010]   A:8000 X:0033 Y:05D4 P:eNvmxdIzc
+$00/83EF E2 20       SEP #$20                A:8000 X:0033 Y:05D4 P:eNvmxdIzc
+$00/83F1 BF 02 80 09 LDA $098002,x[$09:8035] A:8000 X:0033 Y:05D4 P:eNvMxdIzc
+$00/83F5 18          CLC                     A:8001 X:0033 Y:05D4 P:envMxdIzc
+$00/83F6 69 09       ADC #$09                A:8001 X:0033 Y:05D4 P:envMxdIzc
+$00/83F8 85 12       STA $12    [$00:0012]   A:800A X:0033 Y:05D4 P:envMxdIzc
+$00/83FA 8A          TXA                     A:800A X:0033 Y:05D4 P:envMxdIzc
+$00/83FB F0 28       BEQ $28    [$8425]      A:8033 X:0033 Y:05D4 P:envMxdIzc
+$00/83FD A2 1F 00    LDX #$001F              A:8033 X:0033 Y:05D4 P:envMxdIzc
+$00/8400 9E A2 09    STZ $09A2,x[$06:09C1]   A:8033 X:001F Y:05D4 P:envMxdIzc
+$00/8403 CA          DEX                     A:8033 X:001F Y:05D4 P:envMxdIzc
+$00/8404 10 FA       BPL $FA    [$8400]      A:8033 X:001E Y:05D4 P:envMxdIzc
+
+$00/8422 8D 40 21    STA $2140  [$06:2140]   A:BBFA X:FFFF Y:05D4 P:envMxdIZC
+
+
+$00/8435 B7 10       LDA [$10],y[$09:8130]   A:0DCC X:0014 Y:0130 P:enVMxdIZC
+$00/8437 C8          INY                     A:0D70 X:0014 Y:0130 P:enVMxdIzC
+$00/8438 10 05       BPL $05    [$843F]      A:0D70 X:0014 Y:0131 P:enVMxdIzC
+$00/843F EB          XBA                     A:0D70 X:0014 Y:0131 P:enVMxdIzC
+$00/8440 A9 00       LDA #$00                A:700D X:0014 Y:0131 P:enVMxdIzC
+$00/8442 80 12       BRA $12    [$8456]      A:7000 X:0014 Y:0131 P:enVMxdIZC
+$00/8444 EB          XBA                     A:7000 X:0013 Y:0131 P:enVMxdIzC
+$00/8445 B7 10       LDA [$10],y[$09:8131]   A:0070 X:0013 Y:0131 P:enVMxdIzC
+$00/8447 C8          INY                     A:0070 X:0013 Y:0131 P:enVMxdIzC
+$00/8448 10 05       BPL $05    [$844F]      A:0070 X:0013 Y:0132 P:enVMxdIzC
+$00/844F EB          XBA                     A:0070 X:0013 Y:0132 P:enVMxdIzC
+$00/8450 CD 40 21    CMP $2140  [$06:2140]   A:7000 X:0013 Y:0132 P:enVMxdIZC
+$00/8453 D0 FB       BNE $FB    [$8450]      A:7000 X:0013 Y:0132 P:enVMxdIZC
+$00/8455 1A          INC A                   A:7000 X:0013 Y:0132 P:enVMxdIZC
+$00/8456 C2 20       REP #$20                A:7000 X:0014 Y:0131 P:enVMxdIZC
+$00/8458 8D 40 21    STA $2140  [$06:2140]   A:7000 X:0014 Y:0131 P:enVmxdIZC
+$00/845B E2 20       SEP #$20                A:7000 X:0014 Y:0131 P:enVmxdIZC
+$00/845D CA          DEX                     A:7000 X:0014 Y:0131 P:enVMxdIZC
+$00/845E D0 E4       BNE $E4    [$8444]      A:7000 X:0013 Y:0131 P:enVMxdIzC
+
+$00/848E 8D 43 21    STA $2143  [$06:2143]   A:A00D X:0014 Y:012F P:envMxdIzC
+$00/8491 C8          INY                     A:A00D X:0014 Y:012F P:envMxdIzC
+$00/8492 10 05       BPL $05    [$8499]      A:A00D X:0014 Y:0130 P:envMxdIzC
+$00/8499 EB          XBA                     A:A00D X:0014 Y:0130 P:envMxdIzC
+$00/849A 8D 42 21    STA $2142  [$06:2142]   A:0DA0 X:0014 Y:0130 P:eNvMxdIzC
+$00/849D E0 01 00    CPX #$0001              A:0DA0 X:0014 Y:0130 P:eNvMxdIzC
+$00/84A0 A9 00       LDA #$00                A:0DA0 X:0014 Y:0130 P:envMxdIzC
+$00/84A2 2A          ROL A                   A:0D00 X:0014 Y:0130 P:envMxdIZC
+$00/84A3 8D 41 21    STA $2141  [$06:2141]   A:0D01 X:0014 Y:0130 P:envMxdIzc
+$00/84A6 69 7F       ADC #$7F                A:0D01 X:0014 Y:0130 P:envMxdIzc
+$00/84A8 68          PLA                     A:0D80 X:0014 Y:0130 P:eNVMxdIzc
+$00/84A9 8D 40 21    STA $2140  [$06:2140]   A:0DCC X:0014 Y:0130 P:eNVMxdIzc
+$00/84AC CD 40 21    CMP $2140  [$06:2140]   A:0DCC X:0014 Y:0130 P:eNVMxdIzc
+$00/84AF D0 FB       BNE $FB    [$84AC]      A:0DCC X:0014 Y:0130 P:enVMxdIzC
+$00/84B1 70 82       BVS $82    [$8435]      A:0DCC X:0014 Y:0130 P:enVMxdIZC
+$00/84B3 E2 30       SEP #$30                A:002B X:0000 Y:080A P:envMxdIZC
+$00/84B5 A9 01       LDA #$01                A:002B X:0000 Y:000A P:envMXdIZC
+$00/84B7 8F FE FF 7E STA $7EFFFE[$7E:FFFE]   A:0001 X:0000 Y:000A P:envMXdIzC
+$00/84BB 60          RTS                     A:0001 X:0000 Y:000A P:envMXdIzC
+
+$00/84E1 F0 0E       BEQ $0E    [$84F1]      A:1812 X:0080 Y:0026 P:envMXdIzc
+$00/84E3 48          PHA                     A:1812 X:0080 Y:0026 P:envMXdIzc
+$00/84E4 20 FD 84    JSR $84FD  [$00:84FD]   A:1812 X:0080 Y:0026 P:envMXdIzc
+$00/84E7 68          PLA                     A:00FF X:0000 Y:00F3 P:envMXdIZC
+$00/84E8 8F FD FF 7E STA $7EFFFD[$7E:FFFD]   A:0111 X:0004 Y:0024 P:envMXdIzC
+$00/84EC A0 FA       LDY #$FA                A:0111 X:0004 Y:0024 P:envMXdIzC
+$00/84EE 4C D5 83    JMP $83D5  [$00:83D5]   A:0111 X:0004 Y:00FA P:eNvMXdIzC
+
+$00/84FD B9 88 80    LDA $8088,y[$06:80AE]   A:1812 X:0080 Y:0026 P:envMXdIzc
+$00/8500 C9 FF       CMP #$FF                A:184D X:0080 Y:0026 P:envMXdIzc
+$00/8502 F0 0A       BEQ $0A    [$850E]      A:184D X:0080 Y:0026 P:envMXdIzc
+$00/8504 5A          PHY                     A:184D X:0080 Y:0026 P:envMXdIzc
+$00/8505 A0 F9       LDY #$F9                A:184D X:0080 Y:0026 P:envMXdIzc
+$00/8507 20 D5 83    JSR $83D5  [$00:83D5]   A:184D X:0080 Y:00F9 P:eNvMXdIzc
+$00/850E 60          RTS                     A:00FF X:0000 Y:00F3 P:envMXdIZC

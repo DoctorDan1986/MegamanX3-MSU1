@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><cartridge region="NTSC">
+	<hitachidsp model="HG51B169" frequency="20000000" firmware="cx4.rom" sha256="ae8d4d1961b93421ff00b3caa1d0f0ce7783e749772a3369c36b3dbf0d37ef18">
+	<rom>
+		<map mode="linear" address="00-7f:8000-ffff"/>
+		<map mode="linear" address="80-ff:8000-ffff"/>
+	</rom>
+	<mmio>
+		<map address="00-3f:6000-7fff"/>
+		<map address="80-bf:6000-7fff"/>
+	</mmio>
+</hitachidsp>
+</cartridge>
