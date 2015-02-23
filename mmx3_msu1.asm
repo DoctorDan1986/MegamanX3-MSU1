@@ -27,9 +27,11 @@ if {defined EMULATOR_VOLUME} {
 	constant DUCKED_VOLUME($60)
 }
 
-constant FADE_DELTA(FULL_VOLUME/45)
+constant FADE_DELTA(2)
 
 // Variables
+variable fadeState($180)
+variable fadeVolume($181)
 
 // FADE_STATE possibles values
 constant FADE_STATE_IDLE($00)
@@ -51,6 +53,10 @@ macro CheckMSUPresence(labelToJump) {
 	bne {labelToJump}
 }
 
+// NMI/VBlank hijack
+seek($068075)
+	jml MSU_VBlankUpdate
+	
 // Play Music Routine
 seek($0084E4)
 	jsr MSU_Main
@@ -100,6 +106,10 @@ CheckMSUAudioStatus:
 	// Set volume
 	lda.b #FULL_VOLUME
 	sta.w MSU_AUDIO_VOLUME
+	
+	// Reset the fade state machine
+	lda.b #$00
+	sta.w fadeState
 	
 	rep #$30
 	ply
@@ -184,6 +194,10 @@ scope MSU_SFXAndCommand: {
 	// Resume music then fade-in to full volume
 	lda.b #$03
 	sta.w MSU_AUDIO_CONTROL
+	lda.b #FADE_STATE_FADEIN
+	sta.w fadeState
+	lda.b #$00
+	sta.w fadeVolume
 	bra .CleanupAndReturn
 
 .StopMusic:
@@ -193,8 +207,11 @@ scope MSU_SFXAndCommand: {
 	and.b #MSU_STATUS_AUDIO_PLAYING
 	beq .CleanupAndReturn
 
-	lda.b #$00
-	sta.w MSU_AUDIO_CONTROL
+	// Fade-out current music then stop it
+	lda.b #FADE_STATE_FADEOUT
+	sta.w fadeState
+	lda.b #FULL_VOLUME
+	sta.w fadeVolume
 	bra .CleanupAndReturn
 
 .RaiseVolume:
@@ -217,4 +234,59 @@ MSUNotFound:
 	plp
 	inx
 	rtl
+}
+
+scope MSU_VBlankUpdate: {
+	php
+	sep #$20
+	pha
+	
+	CheckMSUPresence(OriginalCode)
+	
+	// Switch on fade state
+	lda.w fadeState
+	cmp.b #FADE_STATE_IDLE
+	beq OriginalCode
+	cmp.b #FADE_STATE_FADEOUT
+	beq .FadeOutUpdate
+	cmp.b #FADE_STATE_FADEIN
+	beq .FadeInUpdate
+	bra OriginalCode
+	
+.FadeOutUpdate:
+	lda.w fadeVolume
+	sec
+	sbc.b #FADE_DELTA
+	bcs +
+	lda.b #$00
++;
+	sta.w fadeVolume
+	sta.w MSU_AUDIO_VOLUME
+	beq .FadeOutCompleted
+	bra OriginalCode
+	
+.FadeInUpdate:
+	lda.w fadeVolume
+	clc
+	adc.b #FADE_DELTA
+	bcc +
+	lda.b #FULL_VOLUME
++;
+	sta.w fadeVolume
+	sta.w MSU_AUDIO_VOLUME
+	cmp.b #FULL_VOLUME
+	beq .SetToIdle
+	bra OriginalCode
+
+.FadeOutCompleted:
+	lda.b #$00
+	sta.w MSU_AUDIO_CONTROL
+.SetToIdle:
+	lda.b #FADE_STATE_IDLE
+	sta.w fadeState
+
+OriginalCode:
+	pla
+	plp
+	jml $7E2000
 }
