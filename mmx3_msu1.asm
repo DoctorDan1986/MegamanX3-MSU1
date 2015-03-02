@@ -97,7 +97,7 @@ CheckMSUAudioStatus:
 	// Check if the track is missing
 	lda.w MSU_STATUS
 	and.b #MSU_STATUS_TRACK_MISSING
-	bne OriginalCode
+	bne TrackIsMissing
 	
 	// Play the song and add repeat if needed
 	jsr TrackNeedLooping
@@ -106,6 +106,7 @@ CheckMSUAudioStatus:
 	// Set volume
 	lda.b #FULL_VOLUME
 	sta.w MSU_AUDIO_VOLUME
+	sta.w fadeVolume
 	
 	// Reset the fade state machine
 	lda.b #$00
@@ -116,6 +117,14 @@ CheckMSUAudioStatus:
 	pla
 	plp
 	rts
+	
+TrackIsMissing:
+	// Reset the fade state machine and drop the volume
+	// on track missing
+	lda.b #$00
+	sta.w fadeState
+	sta.w MSU_AUDIO_VOLUME
+	sta.w fadeVolume
 OriginalCode:
 	rep #$30
 	ply
@@ -146,12 +155,6 @@ scope TrackNeedLooping: {
 	beq NoLooping
 // Victory Jingle
 	cpy.b #$13
-	beq NoLooping
-// Intro Cutscene
-	cpy.b #$14
-	beq NoLooping
-// Ending Theme
-	cpy.b #$15
 	beq NoLooping
 // Got a Weapon Jingle
 	cpy.b #$1F
@@ -210,8 +213,6 @@ scope MSU_SFXAndCommand: {
 	// Fade-out current music then stop it
 	lda.b #FADE_STATE_FADEOUT
 	sta.w fadeState
-	lda.b #FULL_VOLUME
-	sta.w fadeVolume
 	bra .CleanupAndReturn
 
 .RaiseVolume:
