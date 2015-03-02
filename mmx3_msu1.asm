@@ -20,14 +20,14 @@ constant MSU_STATUS_DATA_BUSY(%10000000)
 
 // Constants
 if {defined EMULATOR_VOLUME} {
-	constant FULL_VOLUME($50)
+	constant FULL_VOLUME($60)
 	constant DUCKED_VOLUME($20)
+	constant FADE_DELTA(1)
 } else {
 	constant FULL_VOLUME($FF)
 	constant DUCKED_VOLUME($60)
+	constant FADE_DELTA(2)
 }
-
-constant FADE_DELTA(2)
 
 // Variables
 variable fadeState($180)
